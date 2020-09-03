@@ -19,10 +19,9 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: `${baseUrl}favicon.ico` }
     ]
   },
-  styleResources: {
-    scss: ['@/assets/style/variables.scss', '@/assets/style/theme.scss']
-  },
-  plugins: [],
+  loading: { color: '#038375' },
+  css: ['@/assets/variables.scss', '@/assets/theme.scss'],
+  plugins: ['~/plugins/services'],
   components: true,
   buildModules: [
     '@nuxtjs/eslint-module'

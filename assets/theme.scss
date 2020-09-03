@@ -3,3 +3,10 @@
 html {
   font-family: $font-stack;
 }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
