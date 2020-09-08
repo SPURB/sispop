@@ -6,8 +6,13 @@
     <p class="header-nav__page-title">
       SISPOP
     </p>
-    <p class="header-nav__page-title">
-      <input v-model="id" type="text" @keypress.enter="newSearch">
+    <p class="header-nav__page-input">
+      <input
+        v-model="id"
+        type="search"
+        placeholder="Insira o ID da vistoria"
+        @keypress.enter="newSearch"
+      >
     </p>
   </header>
 </template>
@@ -37,8 +42,21 @@ export default {
   display: flex;
   justify-content: space-between;
 
-  &__page-title {
-    align-self: center;
+  &__page {
+    &-title, &-input {
+     align-self: center;
+    }
+
+    &-input {
+      padding-right: 2rem;
+      input {
+        max-width: 100%;
+        height: 30px;
+        border: none;
+        border-radius: 2px;
+        border: 1px solid #ccc;
+      }
+    }
   }
   @media (max-width: $tablet) {
     flex-direction: column;
