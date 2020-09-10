@@ -1,8 +1,13 @@
 <template>
   <div class="vistoria">
-    <template v-if="!isFetching">
-      <main>
-        <section class="header">
+    <div class="vistoria__voltar">
+      <router-link tag="a" to="/">
+        Voltar
+      </router-link>
+    </div>
+    <main>
+      <section class="header">
+        <div class="header__titulo">
           <h1>{{ header.codigoLote }}</h1>
           <h2>
             {{
@@ -12,7 +17,32 @@
                 header.numero
             }}
           </h2>
-        </section>
+        </div>
+        <div class="header__menu">
+          <button
+            type="button"
+            :disabled="!pagination ? true : false"
+            :class="!pagination ? 'disabled' : ''"
+            class="header__menu-nav"
+            @click="pagination = false"
+          >
+            Anterior
+          </button>
+          <h3>
+            {{ pagination ? '2 / 2' : '1 / 2' }}
+          </h3>
+          <button
+            type="button"
+            :class="pagination ? 'disabled' : ''"
+            :disabled="pagination ? true : false"
+            class="header__menu-nav"
+            @click="pagination = true"
+          >
+            Próximo
+          </button>
+        </div>
+      </section>
+      <template v-if="!pagination">
         <section class="grid-container">
           <div class="img img-main">
             <img :src="imagens.imagePrincipal">
@@ -65,7 +95,6 @@
                 {{ caracterizacao.usoEdificacao }}
               </li>
             </ul>
-
             <h3 class="titulo-item top">
               Diagnóstico
             </h3>
@@ -81,8 +110,37 @@
             </ul>
           </div>
         </section>
-      </main>
-    </template>
+      </template>
+      <template v-else>
+        <section class="grid-container-dois">
+          <div class="img-main">
+            <img :src="imagens.imagePrincipal">
+          </div>
+          <div class="dados-ambiencia">
+            <ul>
+              <li>
+                <h3 class="titulo-item top">
+                  Dados de Ambiência
+                </h3>
+                {{ informacaoPgDois.ambiencia }}
+              </li>
+              <li>
+                <h3 class="titulo-item top">
+                  Dados Históricos
+                </h3>
+                {{ informacaoPgDois.historicos }}
+              </li>
+              <li>
+                <h3 class="titulo-item top">
+                  Dados Arquiteônicos
+                </h3>
+                {{ informacaoPgDois.historicos }}
+              </li>
+            </ul>
+          </div>
+        </section>
+      </template>
+    </main>
   </div>
 </template>
 
@@ -100,7 +158,7 @@ export default {
     }
   },
   data: () => ({
-    isFetching: false,
+    pagination: false,
     vistoria: []
   }),
   computed: {
@@ -140,11 +198,11 @@ export default {
       if (this.vistoria.Imovel.Pesquisas[0] !== undefined) {
         const data = this.vistoria.Imovel.Pesquisas[0].NM_CARACTERIZACAO.split('.,')
 
-        caracterizacao.implantacaoAcesso = `${data[0]}.` || 'Não informado.'
-        caracterizacao.qtdPavimentos = `${data[1]}.` || 'Não informado.'
-        caracterizacao.fachadaEsquadrias = `${data[2]}.` || 'Não informado.'
-        caracterizacao.elementosNotaveis = `${data[3]}.` || 'Não informado.'
-        caracterizacao.usoTerreo = `${data[4]}.` || 'Não informado.'
+        caracterizacao.implantacaoAcesso = data[0] !== undefined ? `${data[0]}.` : 'Não informado.'
+        caracterizacao.qtdPavimentos = data[1] !== undefined ? `${data[1]}.` : 'Não informado.'
+        caracterizacao.fachadaEsquadrias = data[2] !== undefined ? `${data[2]}.` : 'Não informado.'
+        caracterizacao.elementosNotaveis = data[3] !== undefined ? `${data[3]}.` : 'Não informado.'
+        caracterizacao.usoTerreo = data[4] !== undefined ? `${data[4]}.` : 'Não informado.'
         caracterizacao.usoEdificacao = data[5] !== undefined ? `${data[5]}.` : 'Não informado.'
       } else {
         caracterizacao.implantacaoAcesso = 'Não informado.'
@@ -163,8 +221,8 @@ export default {
       if (this.vistoria.Imovel.Pesquisas[0] !== undefined) {
         const data = this.vistoria.Imovel.Pesquisas[0].NM_DIAGNOSTICO.split('.,')
 
-        diagnostico.patologiaPaisagem = `${data[0]}.` || 'Não informado.'
-        diagnostico.patologiaConstrutiva = `${data[1]}.` || 'Não informado.'
+        diagnostico.patologiaPaisagem = data[0] !== undefined ? `${data[0]}.` : 'Não informado.'
+        diagnostico.patologiaConstrutiva = data[1] !== undefined ? `${data[1]}.` : 'Não informado.'
       } else {
         diagnostico.patologiaPaisagem = 'Não informado'
         diagnostico.patologiaConstrutiva = 'Não informado'
@@ -174,12 +232,25 @@ export default {
     },
     imagens () {
       return {
-        imagePrincipal: this.vistoria.Imovel.ImagePathBase64,
+        imagePrincipal: `data: image; base64, ${this.vistoria.Imovel.IM_MAPA}`,
         imageSecundaria_1: this.vistoria.Imagens[0],
         imageSecundaria_2: this.vistoria.Imagens[1],
         imageSecundaria_3: this.vistoria.Imagens[2],
         imageSecundaria_4: this.vistoria.Imagens[3]
       }
+    },
+    informacaoPgDois () {
+      const informacaoPgDois = {}
+
+      if (this.vistoria.Imovel.Pesquisas[0] !== undefined) {
+        informacaoPgDois.ambiencia = this.vistoria.Imovel.Pesquisas[0].NM_DADOS_AMBIENCIA || 'Não informado'
+        informacaoPgDois.historicos = this.vistoria.Imovel.Pesquisas[0].NM_DADOS_HISTORICOS || 'Não informado'
+      } else {
+        informacaoPgDois.ambiencia = 'Não informado'
+        informacaoPgDois.historicos = 'Não informado'
+      }
+
+      return informacaoPgDois
     }
   }
 }
@@ -192,13 +263,77 @@ export default {
 
   &__preloader { padding-top: 4rem; }
 
+  &__voltar {
+    padding-top: 15px;
+    a {
+      text-decoration: none;
+      color: #fff;
+      border: 1px solid #fff;
+      border-radius: 5px;
+      margin: 0px 0px 15px 15px;
+      padding: .5rem;
+
+      &:hover {
+        background-color: #fff;
+        color: $brand-1;
+      }
+    }
+  }
+
   main {
-    padding: 2.5rem 1rem;
+    padding: 0 1rem 1rem 1rem;
 
     .header {
       padding: 1.5rem 0;
-      h1 { color: #F7FAFC; font-size: 2rem; }
-      h2 { color: #EDF2F7; font-size: 1.3rem;}
+      width: 100%;
+      display: flex;
+      justify-content:space-between;
+
+      @media (max-width: $tablet) {
+        flex-direction: column;
+      }
+
+      &__titulo {
+        h1 { color: #F7FAFC; font-size: 2rem; }
+        h2 { color: #EDF2F7; font-size: 1.3rem;}
+      }
+
+      &__menu {
+        display: flex;
+        align-items: center;
+        color: #fff;
+
+        @media (max-width: $tablet) {
+          justify-content: space-between;
+          margin-top: 1.5rem;
+        }
+
+        &-nav {
+          color: #fff;
+          background-color: $brand-2;
+          border: 1px solid transparent;
+          border-radius: 2px;
+          padding: 5px;
+          margin: 10px;
+
+          @media (max-width: $tablet) {
+            margin: 0px;
+          }
+
+          &:hover {
+            cursor: pointer;
+            background-color: transparent;
+            border: 1px solid #fff;
+          }
+
+          &.disabled {
+            opacity: 0.8;
+            cursor: not-allowed;
+            background-color: $brand-2;
+            border: 1px solid transparent;
+          }
+        }
+      }
     }
 
     .grid-container {
@@ -253,43 +388,93 @@ export default {
           }
         }
       }
-    }
 
-    .img-main { grid-area: img-main; }
-    .img-first { grid-area: img-first; }
-    .img-second { grid-area: img-second; }
-    .img-third { grid-area: img-third; }
-    .img-fourth { grid-area: img-fourth;}
+      .img-main { grid-area: img-main; }
+      .img-first { grid-area: img-first; }
+      .img-second { grid-area: img-second; }
+      .img-third { grid-area: img-third; }
+      .img-fourth { grid-area: img-fourth;}
 
-    .caracterizacao {
-      grid-area: caracterizacao;
-      padding: .5rem;
+      .caracterizacao {
+        grid-area: caracterizacao;
+        padding: .5rem;
 
-      @media (max-width: $tablet) { padding: 0; }
+        @media (max-width: $tablet) { padding: 0; }
 
-      ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
+        ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
 
-        li {
-          font-size: .8rem;
-          span { font-weight: bold; }
+          li {
+            font-size: .8rem;
+            span { font-weight: bold; }
+          }
+        }
+      }
+      .table {
+        grid-area: table;
+
+        @media (max-width: $tablet) {
+          margin-top: 13px;
         }
       }
     }
-    .table {
-      grid-area: table;
 
-      @media (max-width: $tablet) {
-        margin-top: 13px;
+    .grid-container-dois {
+      background-color: #fff;
+      border-radius: 2px;
+      display: grid;
+      grid-template-columns: .5fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 1px 1px;
+      grid-template-areas:
+        "img-main dados-ambiencia"
+        "img-main dados-ambiencia"
+        ". dados-ambiencia";
+
+      .img-main, .dados-ambiencia {
+        padding: 1rem;
+      }
+      .img-main {
+        img {
+          width: 100%;
+          height: auto;
+        }
+        width: 100%;
+        height: 80vh;
+        grid-area: img-main;
+      }
+
+      .dados-ambiencia {
+        grid-area: dados-ambiencia;
+        width: 100%;
+        -webkit-columns: 50% 2;
+        -moz-columns: 100px 2;
+        columns: 100px 2;
+        -webkit-column-gap: 1px;
+        -moz-column-gap: 1px;
+        column-gap: 20px;
+        word-break: break-word;
+        white-space: normal;
+        text-align: justify;
+
+        ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+
+          li {
+            font-size: .8rem;
+            span { font-weight: bold; }
+          }
+        }
       }
     }
   }
 }
 .titulo-item {
-  font-size: 1rem;
-  font-weight: bold;
+  font-size: 1.2rem;
   margin-bottom: 13px;
 
   &.top { margin-top: 13px; }
