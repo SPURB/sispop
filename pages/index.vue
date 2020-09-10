@@ -16,11 +16,15 @@
         v-model="id"
         type="text"
         class="formulario--input"
+        @keypress.enter="goRouter"
       >
-      <router-link v-if="id > 0" :to="`/vistoria/${id}`" tag="button" class="formulario--btn">
-        Visualizar
-      </router-link>
-      <button v-else type="button" class="formulario--btn block">
+      <button
+        :class="id > 0 ? '' : 'block'"
+        :disabled="id > 0 ? false : true"
+        tag="button"
+        class="formulario--btn"
+        @click="goRouter"
+      >
         Visualizar
       </button>
     </section>
@@ -46,9 +50,27 @@ export default {
       id: ''
     }
   },
+<<<<<<< HEAD
   computed: {
     isValid () {
       return this.id > 0
+=======
+  methods: {
+    scrollTo (ref, reset = false) {
+      const elHeight = reset ? 0 : this.$refs[ref].clientHeight
+      try {
+        window.scrollTo({
+          top: elHeight,
+          left: 0,
+          behavior: 'smooth'
+        })
+      } catch {
+        throw new Error('Could not scroll')
+      }
+    },
+    goRouter () {
+      this.$router.push({ path: `/vistoria/${this.id}` })
+>>>>>>> e792bea... feat: inclui paginação e segunda seção de preview
     }
   }
 }
@@ -97,8 +119,14 @@ export default {
   &--label, &--input, &--btn {
     margin-bottom: 0.5rem;
     width: 30%;
+<<<<<<< HEAD
     @media (max-width: $tablet) {
       width: 80%;
+=======
+
+    @media (max-width: $tablet) {
+      width: 70%;
+>>>>>>> e792bea... feat: inclui paginação e segunda seção de preview
     }
   }
 

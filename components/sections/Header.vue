@@ -31,6 +31,7 @@ export default {
   methods: {
     newSearch () {
       this.$router.push({ path: `/vistoria/${this.id}` })
+      this.id = ''
     }
   }
 }
@@ -42,6 +43,11 @@ export default {
   display: flex;
   justify-content: space-between;
 
+  @media (max-width: $tablet) {
+    flex-direction: column;
+    padding-bottom: 5px;
+  }
+
   &__page {
     &-title, &-input {
      align-self: center;
@@ -49,18 +55,20 @@ export default {
 
     &-input {
       padding-right: 2rem;
+
+      @media (max-width: $tablet) {
+        padding-right: 0;
+        margin-top: 5px;
+      }
+
       input {
         max-width: 100%;
         height: 30px;
-        border: none;
         border-radius: 2px;
         border: 1px solid #ccc;
+        padding: 5px;
       }
     }
-  }
-  @media (max-width: $tablet) {
-    flex-direction: column;
-    align-items: center
   }
   .logo {
     width: 151px;
