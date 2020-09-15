@@ -19,45 +19,57 @@
           </h2>
         </div>
         <div class="header__menu">
-          <button
-            type="button"
-            :disabled="!pagination ? true : false"
-            :class="!pagination ? 'disabled' : ''"
-            class="header__menu-nav"
-            @click="pagination = false"
-          >
-            Anterior
-          </button>
-          <h3>
-            {{ pagination ? '2 / 2' : '1 / 2' }}
-          </h3>
-          <button
-            type="button"
-            :class="pagination ? 'disabled' : ''"
-            :disabled="pagination ? true : false"
-            class="header__menu-nav"
-            @click="pagination = true"
-          >
-            Próximo
-          </button>
+          <div class="header__menu--control">
+            <button
+              type="button"
+              :disabled="!pagination ? true : false"
+              :class="!pagination ? 'disabled' : ''"
+              class="header__menu-nav"
+              @click="pagination = false"
+            >
+              Anterior
+            </button>
+            <h3>
+              {{ pagination ? '2 / 2' : '1 / 2' }}
+            </h3>
+            <button
+              type="button"
+              :class="pagination ? 'disabled' : ''"
+              :disabled="pagination ? true : false"
+              class="header__menu-nav"
+              @click="pagination = true"
+            >
+              Próximo
+            </button>
+          </div>
+          <div class="header__menu--salvar">
+            <Create-PDF
+              :header="header"
+              :ficha="ficha"
+              :caracterizacao="caracterizacao"
+              :diagnostico="diagnostico"
+              :pagina-dois="informacaoPgDois"
+            />
+          </div>
         </div>
       </section>
+
       <template v-if="!pagination">
         <section class="grid-container">
           <div class="img img-main">
-            <img :src="imagens.imagePrincipal">
+            <img :src="imagens.imagem_0">
           </div>
           <div class="img img-first">
-            <img :src="imagens.imageSecundaria_1.ImagePathBase64">
+            <img :src="imagens.imagem_1">
           </div>
           <div class="img img-second">
-            <img :src="imagens.imageSecundaria_2.ImagePathBase64">
+            <img :src="imagens.imagem_2">
           </div>
           <div class="img-third">
-            <img :src="imagens.imageSecundaria_3.ImagePathBase64">
+            <img :src="imagens.imagem_3">
           </div>
           <div class="img img-fourth">
-            <img :src="imagens.imageSecundaria_4.ImagePathBase64">
+            <img :src="imagens.imagem_4">
           </div>
           <div class="table">
             <h3 class="titulo-item">
@@ -114,7 +126,7 @@
       <template v-else>
         <section class="grid-container-dois">
           <div class="img-main">
-            <img :src="imagens.imagePrincipal">
+            <img :src="imagens.imagem_0">
           </div>
           <div class="dados-ambiencia">
             <ul>
@@ -145,9 +157,13 @@
 </template>
 
 <script>
+import CreatePDF from '~/components/elements/CreatePDF'
 export default {
   name: 'Vistoria',
   layout: 'vistoria',
+  components: {
+    CreatePDF
+  },
   async asyncData ({ params, $vistoria }) {
     try {
       const vistoria = await $vistoria.get(params.id)
@@ -173,21 +189,25 @@ export default {
     },
     ficha () {
       const ficha = {
-        nomeEdificio: this.vistoria.Imovel.NM_EDIFICIO || 'Não informado',
-        qtdPavimentos: this.vistoria.Imovel.NR_PAVIMENTOS || 'Não informado',
-        acessoDireto: this.vistoria.Imovel.NR_ACESSOS ? 'Sim' : 'Não'
+        nomeEdificio: this.vistoria.Imovel.NM_EDIFICIO || 'Não informado.',
+        qtdPavimentos: this.vistoria.Imovel.NR_PAVIMENTOS || 'Não informado.',
+        acessoDireto: this.vistoria.Imovel.NR_ACESSOS ? 'Sim.' : 'Não.'
       }
 
       if (this.vistoria.Imovel.Pesquisas[0] !== undefined) {
-        ficha.autorProjeto = this.vistoria.Imovel.Pesquisas[0].NM_AUTOR_PROJETO || 'Não informado'
-        ficha.imovelNotificado = this.vistoria.Imovel.Pesquisas[0].NM_IMOVEL_NOTIFICADO_PEUC || 'Não informado'
-        ficha.construtora = this.vistoria.Imovel.Pesquisas[0].NM_CONSTRUTORA || 'Não informado'
-        ficha.dataConstrucao = this.vistoria.Imovel.Pesquisas[0].DT_CONSTRUCAO || 'Não informada'
+        ficha.autorProjeto = this.vistoria.Imovel.Pesquisas[0].NM_AUTOR_PROJETO || 'Não informado.'
+        ficha.imovelNotificado = this.vistoria.Imovel.Pesquisas[0].NM_IMOVEL_NOTIFICADO_PEUC || 'Não informado.'
+        ficha.construtora = this.vistoria.Imovel.Pesquisas[0].NM_CONSTRUTORA || 'Não informado.'
+        ficha.dataConstrucao = this.vistoria.Imovel.Pesquisas[0].DT_CONSTRUCAO || 'Não informada.'
+        ficha.usoTerreo = this.vistoria.DescrUsoTerreo || 'Não informado.'
+        ficha.usoEdificacao = this.vistoria.DescrUsoEdif || 'Não informado.'
       } else {
-        ficha.autorProjeto = 'Não informado'
-        ficha.imovelNotificado = 'Não informado'
-        ficha.construtora = 'Não informado'
-        ficha.dataConstrucao = 'Não informado'
+        ficha.autorProjeto = 'Não informado.'
+        ficha.imovelNotificado = 'Não informado.'
+        ficha.construtora = 'Não informado.'
+        ficha.dataConstrucao = 'Não informado.'
+        ficha.usoTerreo = 'Não informado.'
+        ficha.usoEdificacao = 'Não informado.'
       }
 
       return ficha
@@ -224,30 +244,30 @@ export default {
         diagnostico.patologiaPaisagem = data[0] !== undefined ? `${data[0]}.` : 'Não informado.'
         diagnostico.patologiaConstrutiva = data[1] !== undefined ? `${data[1]}.` : 'Não informado.'
       } else {
-        diagnostico.patologiaPaisagem = 'Não informado'
-        diagnostico.patologiaConstrutiva = 'Não informado'
+        diagnostico.patologiaPaisagem = 'Não informado.'
+        diagnostico.patologiaConstrutiva = 'Não informado.'
       }
 
       return diagnostico
     },
     imagens () {
       return {
-        imagePrincipal: `data: image; base64, ${this.vistoria.Imovel.IM_MAPA}`,
-        imageSecundaria_1: this.vistoria.Imagens[0],
-        imageSecundaria_2: this.vistoria.Imagens[1],
-        imageSecundaria_3: this.vistoria.Imagens[2],
-        imageSecundaria_4: this.vistoria.Imagens[3]
+        imagem_0: `data:image;base64, ${this.vistoria.Imovel.IM_MAPA}`,
+        imagem_1: `data:image;base64, ${this.vistoria.Imagens[0].IM_IMAGEM}`,
+        imagem_2: `data:image;base64, ${this.vistoria.Imagens[1].IM_IMAGEM}`,
+        imagem_3: `data:image;base64, ${this.vistoria.Imagens[2].IM_IMAGEM}`,
+        imagem_4: `data:image;base64, ${this.vistoria.Imagens[3].IM_IMAGEM}`
       }
     },
     informacaoPgDois () {
       const informacaoPgDois = {}
 
       if (this.vistoria.Imovel.Pesquisas[0] !== undefined) {
-        informacaoPgDois.ambiencia = this.vistoria.Imovel.Pesquisas[0].NM_DADOS_AMBIENCIA || 'Não informado'
-        informacaoPgDois.historicos = this.vistoria.Imovel.Pesquisas[0].NM_DADOS_HISTORICOS || 'Não informado'
+        informacaoPgDois.ambiencia = this.vistoria.Imovel.Pesquisas[0].NM_DADOS_AMBIENCIA || 'Não informado.'
+        informacaoPgDois.historicos = this.vistoria.Imovel.Pesquisas[0].NM_DADOS_HISTORICOS || 'Não informado.'
       } else {
-        informacaoPgDois.ambiencia = 'Não informado'
-        informacaoPgDois.historicos = 'Não informado'
+        informacaoPgDois.ambiencia = 'Não informado.'
+        informacaoPgDois.historicos = 'Não informado.'
       }
 
       return informacaoPgDois
@@ -299,13 +319,28 @@ export default {
       }
 
       &__menu {
-        display: flex;
-        align-items: center;
-        color: #fff;
-
         @media (max-width: $tablet) {
           justify-content: space-between;
           margin-top: 1.5rem;
+        }
+
+        &--control {
+          display: flex;
+          align-items: center;
+          color: #fff;
+
+          @media (max-width: $tablet) {
+            justify-content: space-between;
+            margin-bottom: 5px;
+          }
+        }
+
+        &--salvar {
+          padding: 0 10px;
+
+          @media (max-width: $tablet) {
+            padding: 0;
+          }
         }
 
         &-nav {

@@ -51,6 +51,56 @@
           {{ ficha.dataConstrucao }}
         </td>
       </tr>
+      <tr>
+        <td class="td-header">
+          Tombamento
+        </td>
+        <td class="td-valor">
+          Área envoltória / Tombado
+        </td>
+        <td class="td-header">
+          Legislação incidente
+        </td>
+        <td class="td-valor">
+          Res. n° 00/0000 (CONPRESP)
+        </td>
+      </tr>
+      <tr>
+        <td class="td-header">
+          Uso edificaçao
+        </td>
+        <td class="td-valor">
+          {{ ficha.usoEdificacao }}
+        </td>
+        <td class="td-header">
+          Uso térreo
+        </td>
+        <td class="td-valor">
+          {{ ficha.usoTerreo }}
+        </td>
+      </tr>
+      <tr>
+        <td class="td-header">
+          Quantidade de acessos direto da via
+        </td>
+        <td class="td-valor">
+          00
+        </td>
+        <td class="td-header">
+          Quantidade de atividades no térreo
+        </td>
+        <td class="td-valor">
+          00
+        </td>
+      </tr>
+      <tr>
+        <td class="td-header">
+          Material predominante da fachada
+        </td>
+        <td class="td-valor" colspan="4">
+          Material predominante da fachada
+        </td>
+      </tr>
     </table>
   </div>
 </template>
