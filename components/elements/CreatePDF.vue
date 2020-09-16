@@ -57,10 +57,10 @@ export default {
           widths: ['25%', '25%', '25%', '22.5%'],
           body: [
             ['', '', '', ''],
-            [{ text: 'Nome do edifício', bold: true }, conteudo.acessoDireto, '', ''],
+            [{ text: 'Nome do edifício', bold: true }, conteudo.nomeEdificio, '', ''],
             [
               { text: 'Autor do projeto', bold: true }, conteudo.autorProjeto,
-              { text: 'Construtora', bold: true }, conteudo.contrutora
+              { text: 'Construtora', bold: true }, conteudo.construtora
             ],
             [
               { text: 'Quantidade de pavimentos', bold: true }, conteudo.qtdPavimentos,
@@ -76,9 +76,8 @@ export default {
               { text: 'Legislação incidente', bold: true }, 'Res. n° 00/0000 (CONPRESP)'
             ],
             [
-              { text: 'Uso da edificação', bold: true },
-              'Uso da edificação',
-              { text: 'Uso do térreo', bold: true }, ''
+              { text: 'Uso da edificação', bold: true }, conteudo.usoEdificacao,
+              { text: 'Uso do térreo', bold: true }, conteudo.usoTerreo
             ],
             [
               { text: 'Quantidade de acessos direto da via', bold: true }, '00',

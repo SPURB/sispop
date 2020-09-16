@@ -49,6 +49,7 @@
               :caracterizacao="caracterizacao"
               :diagnostico="diagnostico"
               :pagina-dois="informacaoPgDois"
+              :imagens="imagens"
             />
           </div>
         </div>
@@ -191,7 +192,8 @@ export default {
       const ficha = {
         nomeEdificio: this.vistoria.Imovel.NM_EDIFICIO || 'Não informado.',
         qtdPavimentos: this.vistoria.Imovel.NR_PAVIMENTOS || 'Não informado.',
-        acessoDireto: this.vistoria.Imovel.NR_ACESSOS ? 'Sim.' : 'Não.'
+        acessoDireto: this.vistoria.Imovel.NR_ACESSOS ? 'Sim.' : 'Não.',
+        qtdAcessos: this.vistoria.Imovel.NR_ACESSOS > 0 ? this.vistoria.Imovel.NR_ACESSOS : 0
       }
 
       if (this.vistoria.Imovel.Pesquisas[0] !== undefined) {
@@ -498,6 +500,7 @@ export default {
           list-style: none;
           margin: 0;
           padding: 0;
+          height: 100%;
 
           li {
             font-size: .8rem;
