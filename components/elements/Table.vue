@@ -84,7 +84,7 @@
           Quantidade de acessos direto da via
         </td>
         <td class="td-valor">
-          00
+          {{ ficha.qtdAcessos }}
         </td>
         <td class="td-header">
           Quantidade de atividades no térreo
