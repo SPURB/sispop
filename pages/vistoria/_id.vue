@@ -5,7 +5,7 @@
         Voltar
       </router-link>
     </div>
-    <main>
+    <main v-if="!fetching">
       <section class="header">
         <div class="header__titulo">
           <h1>{{ header.codigoLote }}</h1>
@@ -13,7 +13,6 @@
             {{
               header.sql + ' - ' +
                 header.logradouro + ' , ' +
-                header.cep + ' - N°' +
                 header.numero
             }}
           </h2>
@@ -58,19 +57,24 @@
       <template v-if="!pagination">
         <section class="grid-container">
           <div class="img img-main">
-            <img :src="imagens.imagem_0">
+            <img v-if="imagens.imagem_0.exist" :src="imagens.imagem_0.src">
+            <div v-else class="default" />
           </div>
           <div class="img img-first">
-            <img :src="imagens.imagem_1">
+            <img v-if="imagens.imagem_1.exist" :src="imagens.imagem_1.src">
+            <div v-else class="default" />
           </div>
           <div class="img img-second">
-            <img :src="imagens.imagem_2">
+            <img v-if="imagens.imagem_2.exist" :src="imagens.imagem_2.src">
+            <div v-else class="default" />
           </div>
           <div class="img-third">
-            <img :src="imagens.imagem_3">
+            <img v-if="imagens.imagem_3.exist" :src="imagens.imagem_3.src">
+            <div v-else class="default" />
           </div>
           <div class="img img-fourth">
-            <img :src="imagens.imagem_4">
+            <img v-if="imagens.imagem_4.exist" :src="imagens.imagem_4.src">
+            <div v-else class="default" />
           </div>
           <div class="table">
             <h3 class="titulo-item">
@@ -127,7 +131,7 @@
       <template v-else>
         <section class="grid-container-dois">
           <div class="img-main">
-            <img :src="imagens.imagem_0">
+            <img v-if="imagens.imagem_0.exist" :src="imagens.imagem_0.src">
           </div>
           <div class="dados-ambiencia">
             <ul>
@@ -158,121 +162,106 @@
 </template>
 
 <script>
-import CreatePDF from '~/components/elements/CreatePDF'
+//  import CreatePDF from '~/components/elements/CreatePDF'
+import ficha from '~/services/api-ficha'
 export default {
   name: 'Vistoria',
   layout: 'vistoria',
   components: {
-    CreatePDF
-  },
-  async asyncData ({ params, $vistoria }) {
-    try {
-      const vistoria = await $vistoria.get(params.id)
-      console.log(vistoria.data)
-      return { vistoria: vistoria.data }
-    } catch (err) {
-      console.log(err)
-    }
+    //  CreatePDF
   },
   data: () => ({
     pagination: false,
-    vistoria: []
+    fetching: false,
+    vistoria: {},
+    imagens: {}
   }),
   computed: {
     header () {
       return {
-        codigoLote: this.vistoria.Imovel.Cadastro.NM_CODIGO_LOTE,
-        sql: this.vistoria.Imovel.Cadastro.SQL,
-        cep: this.vistoria.Imovel.Cadastro.NM_CEP,
-        logradouro: this.vistoria.Imovel.Cadastro.NM_LOGRADOURO,
-        numero: this.vistoria.Imovel.Cadastro.NM_NUMERO
+        codigoLote: this.vistoria.codigo,
+        sql: this.vistoria.sql,
+        logradouro: this.vistoria.logradouro,
+        numero: this.vistoria.numEndereco
       }
     },
     ficha () {
-      const ficha = {
-        nomeEdificio: this.vistoria.Imovel.NM_EDIFICIO || 'Não informado.',
-        qtdPavimentos: this.vistoria.Imovel.NR_PAVIMENTOS || 'Não informado.',
-        acessoDireto: this.vistoria.Imovel.NR_ACESSOS ? 'Sim.' : 'Não.',
-        qtdAcessos: this.vistoria.Imovel.NR_ACESSOS > 0 ? this.vistoria.Imovel.NR_ACESSOS : 0
+      return {
+        nomeEdificio: this.vistoria.nomeImovel || 'Não identificado.',
+        qtdPavimentos: this.vistoria.pavimentos || 'Não identificado.',
+        acessoDireto: this.vistoria.acessos ? 'Sim.' : 'Não.',
+        qtdAcessos: this.vistoria.acessos > 0 ? this.vistoria.acessos : 0,
+        autorProjeto: this.vistoria.autorProj || 'Não identificado.',
+        imovelNotificado: '',
+        construtora: this.vistoria.construtora || 'Não identificado.',
+        dataConstrucao: this.vistoria.dataConstr || 'Não identificado.',
+        legislacao: this.vistoria.legislacao || 'Não identificado',
+        matFachada: this.vistoria.matFachada || 'Não identificado',
+        usoTerreo: this.vistoria.usoTerreo || 'Não identificado.',
+        usoEdificacao: this.vistoria.usoEdif || 'Não identificado.'
       }
-
-      if (this.vistoria.Imovel.Pesquisas[0] !== undefined) {
-        ficha.autorProjeto = this.vistoria.Imovel.Pesquisas[0].NM_AUTOR_PROJETO || 'Não informado.'
-        ficha.imovelNotificado = this.vistoria.Imovel.Pesquisas[0].NM_IMOVEL_NOTIFICADO_PEUC || 'Não informado.'
-        ficha.construtora = this.vistoria.Imovel.Pesquisas[0].NM_CONSTRUTORA || 'Não informado.'
-        ficha.dataConstrucao = this.vistoria.Imovel.Pesquisas[0].DT_CONSTRUCAO || 'Não informada.'
-        ficha.usoTerreo = this.vistoria.DescrUsoTerreo || 'Não informado.'
-        ficha.usoEdificacao = this.vistoria.DescrUsoEdif || 'Não informado.'
-      } else {
-        ficha.autorProjeto = 'Não informado.'
-        ficha.imovelNotificado = 'Não informado.'
-        ficha.construtora = 'Não informado.'
-        ficha.dataConstrucao = 'Não informado.'
-        ficha.usoTerreo = 'Não informado.'
-        ficha.usoEdificacao = 'Não informado.'
-      }
-
-      return ficha
     },
     caracterizacao () {
-      const caracterizacao = {}
-
-      if (this.vistoria.Imovel.Pesquisas[0] !== undefined) {
-        const data = this.vistoria.Imovel.Pesquisas[0].NM_CARACTERIZACAO.split('.,')
-
-        caracterizacao.implantacaoAcesso = data[0] !== undefined ? `${data[0]}.` : 'Não informado.'
-        caracterizacao.qtdPavimentos = data[1] !== undefined ? `${data[1]}.` : 'Não informado.'
-        caracterizacao.fachadaEsquadrias = data[2] !== undefined ? `${data[2]}.` : 'Não informado.'
-        caracterizacao.elementosNotaveis = data[3] !== undefined ? `${data[3]}.` : 'Não informado.'
-        caracterizacao.usoTerreo = data[4] !== undefined ? `${data[4]}.` : 'Não informado.'
-        caracterizacao.usoEdificacao = data[5] !== undefined ? `${data[5]}.` : 'Não informado.'
-      } else {
-        caracterizacao.implantacaoAcesso = 'Não informado.'
-        caracterizacao.qtdPavimentos = 'Não informado.'
-        caracterizacao.fachadaEsquadrias = 'Não informado.'
-        caracterizacao.elementosNotaveis = 'Não informado.'
-        caracterizacao.usoTerreo = 'Não informado.'
-        caracterizacao.usoEdificacao = 'Não informado.'
+      return {
+        implantacaoAcesso: '',
+        qtdPavimentos: this.vistoria.pavimentos > 0 ? this.vistoria.pavimentos : 'Não identificado.',
+        fachadaEsquadrias: '',
+        elementosNotaveis: '',
+        usoTerreo: this.vistoria.usoTerreo,
+        usoEdificacao: this.vistoria.usoEdif
       }
-
-      return caracterizacao
     },
     diagnostico () {
-      const diagnostico = {}
-
-      if (this.vistoria.Imovel.Pesquisas[0] !== undefined) {
-        const data = this.vistoria.Imovel.Pesquisas[0].NM_DIAGNOSTICO.split('.,')
-
-        diagnostico.patologiaPaisagem = data[0] !== undefined ? `${data[0]}.` : 'Não informado.'
-        diagnostico.patologiaConstrutiva = data[1] !== undefined ? `${data[1]}.` : 'Não informado.'
-      } else {
-        diagnostico.patologiaPaisagem = 'Não informado.'
-        diagnostico.patologiaConstrutiva = 'Não informado.'
-      }
-
-      return diagnostico
-    },
-    imagens () {
       return {
-        imagem_0: `data:image;base64, ${this.vistoria.Imovel.IM_MAPA}`,
-        imagem_1: `data:image;base64, ${this.vistoria.Imagens[0].IM_IMAGEM}`,
-        imagem_2: `data:image;base64, ${this.vistoria.Imagens[1].IM_IMAGEM}`,
-        imagem_3: `data:image;base64, ${this.vistoria.Imagens[2].IM_IMAGEM}`,
-        imagem_4: `data:image;base64, ${this.vistoria.Imagens[3].IM_IMAGEM}`
+        patologiaPaisagem: '',
+        patologiaConstrutiva: ''
       }
     },
     informacaoPgDois () {
-      const informacaoPgDois = {}
-
-      if (this.vistoria.Imovel.Pesquisas[0] !== undefined) {
-        informacaoPgDois.ambiencia = this.vistoria.Imovel.Pesquisas[0].NM_DADOS_AMBIENCIA || 'Não informado.'
-        informacaoPgDois.historicos = this.vistoria.Imovel.Pesquisas[0].NM_DADOS_HISTORICOS || 'Não informado.'
-      } else {
-        informacaoPgDois.ambiencia = 'Não informado.'
-        informacaoPgDois.historicos = 'Não informado.'
+      return {
+        ambiencia: this.vistoria.ambiencia || 'Não consta nas bases consultadas.',
+        historicos: this.vistoria.dadosHist || 'Não consta nas bases consultadas.'
       }
-
-      return informacaoPgDois
+    }
+  },
+  watch: {
+    imagens () { this.fetching = false }
+  },
+  async created () {
+    this.fetching = true
+    await this.getFicha()
+    await this.getImagens()
+  },
+  methods: {
+    getFicha () {
+      ficha.info(this.$route.params.id)
+        .then((res) => {
+          console.log(res.data)
+          this.vistoria = res.data
+        }).catch((err) => { console.log(err) })
+    },
+    getImagens () {
+      ficha.imagens(this.$route.params.id)
+        .then((res) => {
+          console.log(res.data)
+          this.imagens = {
+            imagem_0: res.data[0]
+              ? { exist: true, src: `data:image;base64, ${res.data[0].IM_IMAGEM}` }
+              : { exist: false, src: '' },
+            imagem_1: res.data[1]
+              ? { exist: true, src: `data:image;base64, ${res.data[1].IM_IMAGEM}` }
+              : { exist: false, src: '' },
+            imagem_2: res.data[2]
+              ? { exist: true, src: `data:image;base64, ${res.data[2].IM_IMAGEM}` }
+              : { exist: false, src: '' },
+            imagem_3: res.data[3]
+              ? { exist: true, src: `data:image;base64, ${res.data[3].IM_IMAGEM}` }
+              : { exist: false, src: '' },
+            imagem_4: res.data[4]
+              ? { exist: true, src: `data:image;base64, ${res.data[4].IM_IMAGEM}` }
+              : { exist: false, src: '' }
+          }
+        }).catch((err) => { console.log(err) })
     }
   }
 }
