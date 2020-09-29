@@ -1,5 +1,5 @@
 const baseUrl = '/sispop/'
-const apiBaseUrl = 'https://servicos.spurbanismo.sp.gov.br/triangulo/api/apivistorias/'
+const apiBaseUrl = 'https://servicos.spurbanismo.sp.gov.br/triangulo/api/ficha/'
 
 export default {
   mode: 'spa',
@@ -21,13 +21,11 @@ export default {
   },
   loading: { color: '#038375' },
   css: ['@/assets/variables.scss', '@/assets/theme.scss'],
-  plugins: ['~/plugins/services'],
   components: true,
   buildModules: [
     '@nuxtjs/eslint-module'
   ],
   modules: [
-    '@nuxtjs/axios',
     '@nuxtjs/pwa'
   ],
   router: {

@@ -62,7 +62,7 @@
           Legislação incidente
         </td>
         <td class="td-valor">
-          Res. n° 00/0000 (CONPRESP)
+          {{ ficha.legislacao }}
         </td>
       </tr>
       <tr>
