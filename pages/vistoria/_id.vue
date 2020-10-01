@@ -42,14 +42,14 @@
             </button>
           </div>
           <div class="header__menu--salvar">
-            <!-- Create-PDF
+            <Create-PDF
               :header="header"
               :ficha="ficha"
               :caracterizacao="caracterizacao"
               :diagnostico="diagnostico"
               :pagina-dois="informacaoPgDois"
               :imagens="imagens"
-            /-->
+            />
           </div>
         </div>
       </section>
@@ -69,8 +69,7 @@
             <div v-else class="default" />
           </div>
           <div class="img-third">
-            <img v-if="imagens.imagem_3.exist" :src="imagens.imagem_3.src">
-            <div v-else class="default" />
+            <img :src="imagens.imagem_3.src">
           </div>
           <div class="img img-fourth">
             <img v-if="imagens.imagem_4.exist" :src="imagens.imagem_4.src">
@@ -97,10 +96,7 @@
               </li>
               <li>
                 <span>Fachada e esquadrias:</span>
-                {{ caracterizacao.fachadaEsquadrias.esquadriasEdif }}
-                {{ caracterizacao.fachadaEsquadrias.esquadriasTerr }}
-                {{ caracterizacao.fachadaEsquadrias.fachadaEdif }}
-                {{ caracterizacao.fachadaEsquadrias.fachadaTerr }}
+                {{ caracterizacao.fachadaEsquadrias }}
               </li>
               <li>
                 <span>Elementos notáveis:</span>
@@ -154,7 +150,7 @@
                 <h3 class="titulo-item top">
                   Dados Arquitetônicos
                 </h3>
-                {{ informacaoPgDois.historicos }}
+                {{ informacaoPgDois.arquitetonicos }}
               </li>
             </ul>
           </div>
@@ -165,37 +161,36 @@
 </template>
 
 <script>
-//  import CreatePDF from '~/components/elements/CreatePDF'
+import CreatePDF from '~/components/elements/CreatePDF'
 import ficha from '~/services/api-ficha'
 export default {
   name: 'Vistoria',
   layout: 'vistoria',
   components: {
-    //  CreatePDF
+    CreatePDF
   },
   async asyncData ({ params }) {
     const resInfo = await ficha.info(params.id)
     const resImagens = await ficha.imagens(params.id)
-
+    const defaultImg = 'data:image;base64, iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYCAMAAACJuGjuAAAAA1BMVEX///+nxBvIAAABgUlEQVR42uzBgQAAAACAoP2pF6kCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABuDw5IAAAAAAT9f92OQAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAlQCA4wABEIp+HAAAAABJRU5ErkJggg=='
     const vistoria = resInfo.data
     const imagens = {
       imagem_0: resImagens.data[0]
-        ? { exist: true, src: `data:image;base64, ${resImagens.data[0].IM_IMAGEM}` }
-        : { exist: false, src: '' },
+        ? { exist: true, src: `data:image;base64,${resImagens.data[0].IM_IMAGEM}` }
+        : { exist: false, src: defaultImg },
       imagem_1: resImagens.data[1]
-        ? { exist: true, src: `data:image;base64, ${resImagens.data[1].IM_IMAGEM}` }
-        : { exist: false, src: '' },
+        ? { exist: true, src: `data:image;base64,${resImagens.data[1].IM_IMAGEM}` }
+        : { exist: false, src: defaultImg },
       imagem_2: resImagens.data[2]
-        ? { exist: true, src: `data:image;base64, ${resImagens.data[2].IM_IMAGEM}` }
-        : { exist: false, src: '' },
+        ? { exist: true, src: `data:image;base64,${resImagens.data[2].IM_IMAGEM}` }
+        : { exist: false, src: defaultImg },
       imagem_3: resImagens.data[3]
-        ? { exist: true, src: `data:image;base64, ${resImagens.data[3].IM_IMAGEM}` }
-        : { exist: false, src: '' },
+        ? { exist: true, src: `data:image;base64,${resImagens.data[3].IM_IMAGEM}` }
+        : { exist: false, src: defaultImg },
       imagem_4: resImagens.data[4]
-        ? { exist: true, src: `data:image;base64, ${resImagens.data[4].IM_IMAGEM}` }
-        : { exist: false, src: '' }
+        ? { exist: true, src: `data:image;base64,${resImagens.data[4].IM_IMAGEM}` }
+        : { exist: false, src: defaultImg }
     }
-
     console.log(vistoria)
     return { vistoria, imagens }
   },
@@ -220,7 +215,6 @@ export default {
         qtdPavimentos: this.vistoria.pavimentos || 'Não identificado.',
         acessoDireto: this.vistoria.acessos ? 'Sim.' : 'Não.',
         qtdAcessos: this.vistoria.acessos > 0 ? this.vistoria.acessos : 0,
-        construtora: this.vistoria.construtora || 'Não identificado.',
         matFachada: this.vistoria.fachada.NM_MATERIAL_FACH_TERR != null ? this.vistoria.fachada.NM_MATERIAL_FACH_TERR : '',
         usoTerreo: this.vistoria.usoTerreo || 'Não identificado.',
         usoEdificacao: this.vistoria.usoEdif || 'Não identificado.'
@@ -230,11 +224,13 @@ export default {
         data.autorProjeto = this.vistoria.pesquisa.NM_AUTOR_PROJETO || 'Não identificado.'
         data.imovelNotificado = this.vistoria.pesquisa.NM_IMOVEL_NOTIFICADO_PEUC || 'Não informado.'
         data.dataConstrucao = this.vistoria.pesquisa.DT_CONSTRUCAO || 'Não identificado.'
+        data.construtora = this.vistoria.pesquisa.NM_CONSTRUTORA || 'Não identificado.'
         data.legislacao = this.vistoria.pesquisa.NM_LEI_TOMBAMENTO || 'Não identificado.'
         data.tombamento = this.vistoria.pesquisa.TB_TIPO_TOMBAMENTO.NM_DESCRICAO || 'Não identificado.'
       } else {
         data.autorProjeto = 'Não identificado.'
         data.imovelNotificado = 'Não informado.'
+        data.construtora = 'Não identificado.'
         data.dataConstrucao = 'Não identificaodo.'
         data.legislacao = 'Não identificado.'
         data.tombamento = 'Não identificado.'
@@ -243,36 +239,55 @@ export default {
       return data
     },
     caracterizacao () {
-      return {
-        implantacaoAcesso: '',
-        qtdPavimentos: this.vistoria.pavimentos > 0 ? this.vistoria.pavimentos : 'Não identificado.',
-        fachadaEsquadrias: {
-          esquadriasEdif: this.vistoria.fachada.NM_MATERIAL_ESQD_EDIF != null ? `${this.vistoria.fachada.NM_MATERIAL_ESQD_EDIF},` : '',
-          esquadriasTerr: this.vistoria.fachada.NM_MATERIAL_ESQD_TERR != null ? `${this.vistoria.fachada.NM_MATERIAL_ESQD_TERR},` : '',
-          fachadaEdif: this.vistoria.fachada.NM_MATERIAL_FACH_EDIF != null ? `${this.vistoria.fachada.NM_MATERIAL_FACH_EDIF},` : '',
-          fachadaTerr: this.vistoria.fachada.NM_MATERIAL_FACH_TERR != null ? `${this.vistoria.fachada.NM_MATERIAL_FACH_TERR}.` : ''
-        },
-        elementosNotaveis: this.vistoria.fachada.NM_OUTROS_NOTAVEIS || 'Não identificado.',
-        usoTerreo: this.vistoria.usoTerreo,
-        usoEdificacao: this.vistoria.usoEdif
+      if (this.vistoria.pesquisa) {
+        const data = this.vistoria.pesquisa.NM_CARACTERIZACAO.split('.,')
+        return {
+          exist: true,
+          implantacaoAcesso: data[0] !== undefined ? `${data[0]}.` : 'Não identificado.',
+          qtdPavimentos: data[1] !== undefined ? `${data[1]}.` : 'Não identificado.',
+          fachadaEsquadrias: data[2] !== undefined ? `${data[2]}.` : 'Não identificado.',
+          elementosNotaveis: data[3] !== undefined ? `${data[3]}.` : 'Não identificado.',
+          usoTerreo: data[4] !== undefined ? `${data[4]}.` : 'Não identificado.',
+          usoEdificacao: data[5] !== undefined ? `${data[5]}.` : 'Não identificado.'
+        }
+      } else {
+        return {
+          exist: false,
+          implantacaoAcesso: 'Não identificado.',
+          qtdPavimentos: 'Não identificado.',
+          fachadaEsquadrias: 'Não identificado.',
+          elementosNotaveis: 'Não identificado.',
+          usoTerreo: 'Não identificado.',
+          usoEdificacao: 'Não identificado.'
+        }
       }
     },
     diagnostico () {
-      return {
-        patologiaPaisagem: '',
-        patologiaConstrutiva: ''
+      if (this.vistoria.pesquisa) {
+        const data = this.vistoria.pesquisa.NM_DIAGNOSTICO.split('.,').filter(v => v !== 'N/A')
+        return {
+          patologiaPaisagem: data[0] !== undefined ? `${data[0]}.` : 'Não identificado.',
+          patologiaConstrutiva: data[1] !== undefined ? `${data[1]}.` : 'Não identificado.'
+        }
+      } else {
+        return {
+          patologiaPaisagem: '',
+          patologiaConstrutiva: ''
+        }
       }
     },
     informacaoPgDois () {
       if (this.vistoria.pesquisa) {
         return {
           ambiencia: this.vistoria.pesquisa.NM_DADOS_AMBIENCIA || 'Não consta nas bases consultadas.',
-          historicos: this.vistoria.pesquisa.NM_DADOS_HISTORICOS || 'Não consta nas bases consultadas.'
+          historicos: this.vistoria.pesquisa.NM_DADOS_HISTORICOS || 'Não consta nas bases consultadas.',
+          arquitetonicos: this.vistoria.pesquisa.NM_ESTILO_ARQUITETONICO || 'Não consta nas bases consultadas.'
         }
       } else {
         return {
           ambiencia: 'Não consta nas bases consultadas.',
-          historicos: 'Não consta nas bases consultadas.'
+          historicos: 'Não consta nas bases consultadas.',
+          arquitetonicos: 'Não consta nas bases consultadas.'
         }
       }
     }
