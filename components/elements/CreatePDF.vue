@@ -196,11 +196,10 @@ export default {
         const tabela = this.buildTabela(this.ficha)
 
         const sectionC = {
-          width: 'auto',
+          width: this.caracterizacao.exist ? 'auto' : '100%',
           alignment: 'justify',
           columns: [caracterizacao]
         }
-
         const content = {
           pageOrientation: 'landscape',
           content: [
@@ -211,42 +210,40 @@ export default {
             {
               style: 'subtitulo',
               text: this.header.sql + ' - ' +
-                this.header.logradouro + ' , ' +
-                this.header.cep + ' - N°' +
+                this.header.logradouro + ' - N°' +
                 this.header.numero
             },
             {
-              margin: [0, 15, 0, 0],
               columns: [
                 {
                   columns: [
                     {
-                      image: this.imagens.imagem_0,
+                      image: this.imagens.imagem_0.src,
                       width: 250,
                       height: 220
                     },
                     [
                       {
-                        image: this.imagens.imagem_1,
+                        image: this.imagens.imagem_1.src,
                         width: 100,
                         height: 100
                       },
                       {
                         margin: [0, 20, 0, 0],
-                        image: this.imagens.imagem_2,
+                        image: this.imagens.imagem_2.src,
                         width: 100,
                         height: 100
                       }
                     ],
                     [
                       {
-                        image: this.imagens.imagem_3,
+                        image: this.imagens.imagem_3.src,
                         width: 100,
                         height: 100
                       },
                       {
                         margin: [0, 20, 0, 0],
-                        image: this.imagens.imagem_4,
+                        image: this.imagens.imagem_4.src,
                         width: 100,
                         height: 100
                       }
@@ -258,6 +255,7 @@ export default {
             },
             {
               bold: true,
+              marginTop: 7,
               text: 'Ficha do Edifício'
             },
             {
@@ -274,14 +272,13 @@ export default {
             {
               style: 'subtitulo',
               text: this.header.sql + ' - ' +
-                this.header.logradouro + ' , ' +
-                this.header.cep + ' - N°' +
+                this.header.logradouro + ' - N°' +
                 this.header.numero
             },
             {
               columns: [
                 {
-                  image: this.imagens.imagem_0,
+                  image: this.imagens.imagem_0.src,
                   width: 300,
                   height: 250
                 },
@@ -324,7 +321,8 @@ export default {
               bold: true
             },
             subtitulo: {
-              fontSize: 15
+              fontSize: 15,
+              marginBottom: 5
             },
             itemTitulo: {
               fontSize: 12,
