@@ -56,7 +56,7 @@
           Tombamento
         </td>
         <td class="td-valor">
-          Área envoltória / Tombado
+          {{ ficha.tombamento }}
         </td>
         <td class="td-header">
           Legislação incidente
@@ -98,7 +98,7 @@
           Material predominante da fachada
         </td>
         <td class="td-valor" colspan="4">
-          Material predominante da fachada
+          {{ ficha.matFachada }}
         </td>
       </tr>
     </table>

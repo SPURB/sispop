@@ -42,14 +42,14 @@
             </button>
           </div>
           <div class="header__menu--salvar">
-            <Create-PDF
+            <!-- Create-PDF
               :header="header"
               :ficha="ficha"
               :caracterizacao="caracterizacao"
               :diagnostico="diagnostico"
               :pagina-dois="informacaoPgDois"
               :imagens="imagens"
-            />
+            /-->
           </div>
         </div>
       </section>
@@ -97,7 +97,10 @@
               </li>
               <li>
                 <span>Fachada e esquadrias:</span>
-                {{ caracterizacao.fachadaEsquadrias }}
+                {{ caracterizacao.fachadaEsquadrias.esquadriasEdif }}
+                {{ caracterizacao.fachadaEsquadrias.esquadriasTerr }}
+                {{ caracterizacao.fachadaEsquadrias.fachadaEdif }}
+                {{ caracterizacao.fachadaEsquadrias.fachadaTerr }}
               </li>
               <li>
                 <span>Elementos notáveis:</span>
@@ -149,7 +152,7 @@
               </li>
               <li>
                 <h3 class="titulo-item top">
-                  Dados Arquiteônicos
+                  Dados Arquitetônicos
                 </h3>
                 {{ informacaoPgDois.historicos }}
               </li>
@@ -170,6 +173,32 @@ export default {
   components: {
     //  CreatePDF
   },
+  async asyncData ({ params }) {
+    const resInfo = await ficha.info(params.id)
+    const resImagens = await ficha.imagens(params.id)
+
+    const vistoria = resInfo.data
+    const imagens = {
+      imagem_0: resImagens.data[0]
+        ? { exist: true, src: `data:image;base64, ${resImagens.data[0].IM_IMAGEM}` }
+        : { exist: false, src: '' },
+      imagem_1: resImagens.data[1]
+        ? { exist: true, src: `data:image;base64, ${resImagens.data[1].IM_IMAGEM}` }
+        : { exist: false, src: '' },
+      imagem_2: resImagens.data[2]
+        ? { exist: true, src: `data:image;base64, ${resImagens.data[2].IM_IMAGEM}` }
+        : { exist: false, src: '' },
+      imagem_3: resImagens.data[3]
+        ? { exist: true, src: `data:image;base64, ${resImagens.data[3].IM_IMAGEM}` }
+        : { exist: false, src: '' },
+      imagem_4: resImagens.data[4]
+        ? { exist: true, src: `data:image;base64, ${resImagens.data[4].IM_IMAGEM}` }
+        : { exist: false, src: '' }
+    }
+
+    console.log(vistoria)
+    return { vistoria, imagens }
+  },
   data: () => ({
     pagination: false,
     fetching: false,
@@ -186,27 +215,44 @@ export default {
       }
     },
     ficha () {
-      return {
+      const data = {
         nomeEdificio: this.vistoria.nomeImovel || 'Não identificado.',
         qtdPavimentos: this.vistoria.pavimentos || 'Não identificado.',
         acessoDireto: this.vistoria.acessos ? 'Sim.' : 'Não.',
         qtdAcessos: this.vistoria.acessos > 0 ? this.vistoria.acessos : 0,
-        autorProjeto: this.vistoria.autorProj || 'Não identificado.',
-        imovelNotificado: '',
         construtora: this.vistoria.construtora || 'Não identificado.',
-        dataConstrucao: this.vistoria.dataConstr || 'Não identificado.',
-        legislacao: this.vistoria.legislacao || 'Não identificado',
-        matFachada: this.vistoria.matFachada || 'Não identificado',
+        matFachada: this.vistoria.fachada.NM_MATERIAL_FACH_TERR != null ? this.vistoria.fachada.NM_MATERIAL_FACH_TERR : '',
         usoTerreo: this.vistoria.usoTerreo || 'Não identificado.',
         usoEdificacao: this.vistoria.usoEdif || 'Não identificado.'
       }
+
+      if (this.vistoria.pesquisa) {
+        data.autorProjeto = this.vistoria.pesquisa.NM_AUTOR_PROJETO || 'Não identificado.'
+        data.imovelNotificado = this.vistoria.pesquisa.NM_IMOVEL_NOTIFICADO_PEUC || 'Não informado.'
+        data.dataConstrucao = this.vistoria.pesquisa.DT_CONSTRUCAO || 'Não identificado.'
+        data.legislacao = this.vistoria.pesquisa.NM_LEI_TOMBAMENTO || 'Não identificado.'
+        data.tombamento = this.vistoria.pesquisa.TB_TIPO_TOMBAMENTO.NM_DESCRICAO || 'Não identificado.'
+      } else {
+        data.autorProjeto = 'Não identificado.'
+        data.imovelNotificado = 'Não informado.'
+        data.dataConstrucao = 'Não identificaodo.'
+        data.legislacao = 'Não identificado.'
+        data.tombamento = 'Não identificado.'
+      }
+
+      return data
     },
     caracterizacao () {
       return {
         implantacaoAcesso: '',
         qtdPavimentos: this.vistoria.pavimentos > 0 ? this.vistoria.pavimentos : 'Não identificado.',
-        fachadaEsquadrias: '',
-        elementosNotaveis: '',
+        fachadaEsquadrias: {
+          esquadriasEdif: this.vistoria.fachada.NM_MATERIAL_ESQD_EDIF != null ? `${this.vistoria.fachada.NM_MATERIAL_ESQD_EDIF},` : '',
+          esquadriasTerr: this.vistoria.fachada.NM_MATERIAL_ESQD_TERR != null ? `${this.vistoria.fachada.NM_MATERIAL_ESQD_TERR},` : '',
+          fachadaEdif: this.vistoria.fachada.NM_MATERIAL_FACH_EDIF != null ? `${this.vistoria.fachada.NM_MATERIAL_FACH_EDIF},` : '',
+          fachadaTerr: this.vistoria.fachada.NM_MATERIAL_FACH_TERR != null ? `${this.vistoria.fachada.NM_MATERIAL_FACH_TERR}.` : ''
+        },
+        elementosNotaveis: this.vistoria.fachada.NM_OUTROS_NOTAVEIS || 'Não identificado.',
         usoTerreo: this.vistoria.usoTerreo,
         usoEdificacao: this.vistoria.usoEdif
       }
@@ -218,29 +264,36 @@ export default {
       }
     },
     informacaoPgDois () {
-      return {
-        ambiencia: this.vistoria.ambiencia || 'Não consta nas bases consultadas.',
-        historicos: this.vistoria.dadosHist || 'Não consta nas bases consultadas.'
+      if (this.vistoria.pesquisa) {
+        return {
+          ambiencia: this.vistoria.pesquisa.NM_DADOS_AMBIENCIA || 'Não consta nas bases consultadas.',
+          historicos: this.vistoria.pesquisa.NM_DADOS_HISTORICOS || 'Não consta nas bases consultadas.'
+        }
+      } else {
+        return {
+          ambiencia: 'Não consta nas bases consultadas.',
+          historicos: 'Não consta nas bases consultadas.'
+        }
       }
     }
   },
-  watch: {
-    imagens () { this.fetching = false }
-  },
-  async created () {
-    this.fetching = true
+  /* async created () {
     await this.getFicha()
     await this.getImagens()
-  },
+  }, */
   methods: {
     getFicha () {
+      this.fetching = true
       ficha.info(this.$route.params.id)
         .then((res) => {
           console.log(res.data)
           this.vistoria = res.data
-        }).catch((err) => { console.log(err) })
+        })
+        .catch((err) => { console.log(err) })
+        .finally(() => { this.fetching = false })
     },
     getImagens () {
+      this.fetching = true
       ficha.imagens(this.$route.params.id)
         .then((res) => {
           console.log(res.data)
@@ -261,7 +314,9 @@ export default {
               ? { exist: true, src: `data:image;base64, ${res.data[4].IM_IMAGEM}` }
               : { exist: false, src: '' }
           }
-        }).catch((err) => { console.log(err) })
+        })
+        .catch((err) => { console.log(err) })
+        .finally(() => { this.fetching = false })
     }
   }
 }
