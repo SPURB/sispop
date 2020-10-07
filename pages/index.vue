@@ -1,15 +1,12 @@
 <template>
   <div ref="index" class="index">
-    <section class="index__landing landing">
-      <logo-spurb :fill-type="'#fff'" :fill-brand="'#fff'" />
-      <p class="index__caption">
-        <b>SISPOP</b><br>
-        Visualização de dados para das Vistorias da São Paulo Urbanismo
-      </p>
-      <a class="landing__controller" @click.prevent="scrollTo('formulario')">
-        <seta :horizontal="true" />
-      </a>
-    </section>
+    <nav class="landing">
+      <logo class="landing__logo" fill-type="white" fill-brand="white" :opacity="1" />
+      <section class="landing__title">
+        <h1>SISPOP</h1>
+        <p>Dados de vistorias da São Paulo Urbanismo</p>
+      </section>
+    </nav>
     <section ref="formulario" class="formulario">
       <label for="idvistoria" class="formulario--label">
         Informe o ID da vistoria:
@@ -34,16 +31,14 @@
 </template>
 
 <script>
-import LogoSpurb from '~/components/icons/LogoSpurb'
-import Seta from '~/components/icons/Seta'
+import { Logo } from '@spurb/componentes'
 import Footer from '~/components/sections/Footer'
 
 export default {
   name: 'Index',
   layout: 'home',
   components: {
-    LogoSpurb,
-    Seta,
+    Logo,
     Footer
   },
   data () {
@@ -55,26 +50,15 @@ export default {
     isValid () {
       return this.id > 0
     }
-  },
-  methods: {
-    scrollTo (ref, reset = false) {
-      const elHeight = reset ? 0 : this.$refs[ref].clientHeight
-      try {
-        window.scrollTo({
-          top: elHeight,
-          left: 0,
-          behavior: 'smooth'
-        })
-      } catch {
-        throw new Error('Could not scroll')
-      }
-    }
   }
 }
 
 </script>
 <style lang="scss" scoped>
 @import '~/assets/variables';
+
+$landingheight: 53px;
+$hd: 1600px;
 
 .index {
   &__caption {
@@ -85,24 +69,40 @@ export default {
     }
   }
 }
-.index__landing {
+.formulario,
+.landing {
+  background-color: #E2E8F0;
   display: flex;
-  align-items: center;
+}
+.landing {
+  padding: 1rem;
   justify-content: space-between;
-  flex-direction: column;
+  align-items: end;
+  background-color:$brand-1;
+  color: white;
+  &__logo {
+    max-width: 150px;
+  }
+  h1, p {
+    text-align: right;
+  }
+  p {
+    font-size: small;
+  }
 }
 
 .formulario {
-  background-color: #E2E8F0;
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: calc(100vh - 160px);
 
   &--label, &--input, &--btn {
     margin-bottom: 0.5rem;
     width: 30%;
+    @media (max-width: $tablet) {
+      width: 80%;
+    }
   }
 
   &--input, &--btn {
@@ -129,26 +129,6 @@ export default {
     &.block {
       cursor: not-allowed;
       opacity: 0.5;
-    }
-  }
-}
-
-.landing {
-  height: 100vh;
-  background-color: $brand-1;
-  .logo {
-    margin-top: auto
-  }
-  p {
-    margin: 1.5rem 1rem auto;
-    color: #ffffff;
-    text-align: center;
-  }
-  a {
-    height: 52px;
-    margin: 0 auto;
-    &:hover {
-      cursor: pointer
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="footer__info">
-    <p>Caso surjam dúvidas ou problemas técnicos, envie um e-mail para <a class="info__email" href="mailto:desenvolvimento@spurbanismo.sp.gov.br?subject=Relatórios%20São%20Paulo%20Urbanismo">desenvolvimento@spurbanismo.sp.gov.br</a></p>
-    <a class="info__icon" href="https://github.com/spurb/relatorios"><github /></a>
+    <p>Caso surjam dúvidas ou problemas técnicos, envie um e-mail para <a class="info__email" href="mailto:desenvolvimento@spurbanismo.sp.gov.br?subject=Sispop%20São%20Paulo%20Urbanismo">desenvolvimento@spurbanismo.sp.gov.br</a></p>
+    <a class="info__icon" href="https://github.com/spurb/sispop"><github /></a>
   </div>
 </template>
 <script>
@@ -25,6 +25,7 @@ export default {
   @media(max-width: $tablet) {
     flex-direction: column;
     text-align: center;
+    font-size: small;
   }
 }
 
