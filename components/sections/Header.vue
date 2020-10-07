@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import LogoSpurb from '~/components/icons/LogoSpurb.vue'
+import { Logo as LogoSpurb } from '@spurb/componentes'
 
 export default {
   name: 'Header',

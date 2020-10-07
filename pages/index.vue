@@ -57,9 +57,6 @@ export default {
 <style lang="scss" scoped>
 @import '~/assets/variables';
 
-$landingheight: 53px;
-$hd: 1600px;
-
 .index {
   &__caption {
     max-width: 600px;
