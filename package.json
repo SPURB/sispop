@@ -14,11 +14,7 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.0.0-beta.20",
-<<<<<<< HEAD
     "@spurb/componentes": "0.0.1",
-=======
-    "axios": "^0.20.0",
->>>>>>> 273be73... chore: refatora chamada na api e computeds
     "nuxt": "^2.14.0"
   },
   "devDependencies": {
