@@ -50,27 +50,14 @@ export default {
       id: ''
     }
   },
-<<<<<<< HEAD
   computed: {
     isValid () {
       return this.id > 0
-=======
+    }
+  },
   methods: {
-    scrollTo (ref, reset = false) {
-      const elHeight = reset ? 0 : this.$refs[ref].clientHeight
-      try {
-        window.scrollTo({
-          top: elHeight,
-          left: 0,
-          behavior: 'smooth'
-        })
-      } catch {
-        throw new Error('Could not scroll')
-      }
-    },
     goRouter () {
       this.$router.push({ path: `/vistoria/${this.id}` })
->>>>>>> e792bea... feat: inclui paginação e segunda seção de preview
     }
   }
 }
@@ -119,14 +106,8 @@ export default {
   &--label, &--input, &--btn {
     margin-bottom: 0.5rem;
     width: 30%;
-<<<<<<< HEAD
     @media (max-width: $tablet) {
       width: 80%;
-=======
-
-    @media (max-width: $tablet) {
-      width: 70%;
->>>>>>> e792bea... feat: inclui paginação e segunda seção de preview
     }
   }
 

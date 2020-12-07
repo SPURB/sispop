@@ -231,7 +231,7 @@ export default {
         data.autorProjeto = 'Não identificado.'
         data.imovelNotificado = 'Não informado.'
         data.construtora = 'Não identificado.'
-        data.dataConstrucao = 'Não identificaodo.'
+        data.dataConstrucao = 'Não identificado.'
         data.legislacao = 'Não identificado.'
         data.tombamento = 'Não identificado.'
       }
@@ -290,48 +290,6 @@ export default {
           arquitetonicos: 'Não consta nas bases consultadas.'
         }
       }
-    }
-  },
-  /* async created () {
-    await this.getFicha()
-    await this.getImagens()
-  }, */
-  methods: {
-    getFicha () {
-      this.fetching = true
-      ficha.info(this.$route.params.id)
-        .then((res) => {
-          console.log(res.data)
-          this.vistoria = res.data
-        })
-        .catch((err) => { console.log(err) })
-        .finally(() => { this.fetching = false })
-    },
-    getImagens () {
-      this.fetching = true
-      ficha.imagens(this.$route.params.id)
-        .then((res) => {
-          console.log(res.data)
-          this.imagens = {
-            imagem_0: res.data[0]
-              ? { exist: true, src: `data:image;base64, ${res.data[0].IM_IMAGEM}` }
-              : { exist: false, src: '' },
-            imagem_1: res.data[1]
-              ? { exist: true, src: `data:image;base64, ${res.data[1].IM_IMAGEM}` }
-              : { exist: false, src: '' },
-            imagem_2: res.data[2]
-              ? { exist: true, src: `data:image;base64, ${res.data[2].IM_IMAGEM}` }
-              : { exist: false, src: '' },
-            imagem_3: res.data[3]
-              ? { exist: true, src: `data:image;base64, ${res.data[3].IM_IMAGEM}` }
-              : { exist: false, src: '' },
-            imagem_4: res.data[4]
-              ? { exist: true, src: `data:image;base64, ${res.data[4].IM_IMAGEM}` }
-              : { exist: false, src: '' }
-          }
-        })
-        .catch((err) => { console.log(err) })
-        .finally(() => { this.fetching = false })
     }
   }
 }
