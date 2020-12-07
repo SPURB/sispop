@@ -50,11 +50,6 @@ export default {
       id: ''
     }
   },
-  computed: {
-    isValid () {
-      return this.id > 0
-    }
-  },
   methods: {
     goRouter () {
       this.$router.push({ path: `/vistoria/${this.id}` })
