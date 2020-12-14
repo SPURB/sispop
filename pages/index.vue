@@ -16,11 +16,15 @@
         v-model="id"
         type="text"
         class="formulario--input"
+        @keypress.enter="goRouter"
       >
-      <router-link v-if="id > 0" :to="`/vistoria/${id}`" tag="button" class="formulario--btn">
-        Visualizar
-      </router-link>
-      <button v-else type="button" class="formulario--btn block">
+      <button
+        :class="id > 0 ? '' : 'block'"
+        :disabled="id > 0 ? false : true"
+        tag="button"
+        class="formulario--btn"
+        @click="goRouter"
+      >
         Visualizar
       </button>
     </section>
@@ -46,9 +50,9 @@ export default {
       id: ''
     }
   },
-  computed: {
-    isValid () {
-      return this.id > 0
+  methods: {
+    goRouter () {
+      this.$router.push({ path: `/vistoria/${this.id}` })
     }
   }
 }

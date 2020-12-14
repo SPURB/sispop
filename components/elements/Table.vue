@@ -6,7 +6,7 @@
           Nome do edifício
         </td>
         <td class="td-valor" colspan="4">
-          Nome do Edifício
+          {{ ficha.nomeEdificio }}
         </td>
       </tr>
       <tr>
@@ -14,13 +14,13 @@
           Autor do projeto
         </td>
         <td class="td-valor">
-          Autor do projeto
+          {{ ficha.autorProjeto }}
         </td>
         <td class="td-header">
           Construtora
         </td>
         <td class="td-valor">
-          Construtora
+          {{ ficha.construtora }}
         </td>
       </tr>
       <tr>
@@ -28,13 +28,13 @@
           Quantidade de pavimentos
         </td>
         <td class="td-valor">
-          00
+          {{ ficha.qtdPavimentos }}
         </td>
         <td class="td-header">
           Acesso direto aos demais pavimentos direto da rua?
         </td>
         <td class="td-valor">
-          Sim/Não
+          {{ ficha.acessoDireto }}
         </td>
       </tr>
       <tr>
@@ -42,13 +42,63 @@
           Imóvel notificado (PEUC)
         </td>
         <td class="td-valor">
-          Subutilizado
+          {{ ficha.imovelNotificado }}
         </td>
         <td class="td-header">
           Data de construção
         </td>
         <td class="td-valor">
-          0000-00-00
+          {{ ficha.dataConstrucao }}
+        </td>
+      </tr>
+      <tr>
+        <td class="td-header">
+          Tombamento
+        </td>
+        <td class="td-valor">
+          {{ ficha.tombamento }}
+        </td>
+        <td class="td-header">
+          Legislação incidente
+        </td>
+        <td class="td-valor">
+          {{ ficha.legislacao }}
+        </td>
+      </tr>
+      <tr>
+        <td class="td-header">
+          Uso edificaçao
+        </td>
+        <td class="td-valor">
+          {{ ficha.usoEdificacao }}
+        </td>
+        <td class="td-header">
+          Uso térreo
+        </td>
+        <td class="td-valor">
+          {{ ficha.usoTerreo }}
+        </td>
+      </tr>
+      <tr>
+        <td class="td-header">
+          Quantidade de acessos direto da via
+        </td>
+        <td class="td-valor">
+          {{ ficha.qtdAcessos }}
+        </td>
+        <td class="td-header">
+          Quantidade de atividades no térreo
+        </td>
+        <td class="td-valor">
+          00
+        </td>
+      </tr>
+      <tr>
+        <td class="td-header">
+          Material predominante da fachada
+        </td>
+        <td class="td-valor" colspan="4">
+          {{ ficha.matFachada }}
         </td>
       </tr>
     </table>
@@ -57,7 +107,13 @@
 
 <script>
 export default {
-
+  name: 'Ficha',
+  props: {
+    ficha: {
+      type: Object,
+      required: true
+    }
+  }
 }
 </script>
 

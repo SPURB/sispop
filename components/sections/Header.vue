@@ -6,8 +6,13 @@
     <p class="header-nav__page-title">
       SISPOP
     </p>
-    <p class="header-nav__page-title">
-      <input v-model="id" type="text" @keypress.enter="newSearch">
+    <p class="header-nav__page-input">
+      <input
+        v-model="id"
+        type="search"
+        placeholder="Insira o ID da vistoria"
+        @keypress.enter="newSearch"
+      >
     </p>
   </header>
 </template>
@@ -26,6 +31,7 @@ export default {
   methods: {
     newSearch () {
       this.$router.push({ path: `/vistoria/${this.id}` })
+      this.id = ''
     }
   }
 }
@@ -37,12 +43,32 @@ export default {
   display: flex;
   justify-content: space-between;
 
-  &__page-title {
-    align-self: center;
-  }
   @media (max-width: $tablet) {
     flex-direction: column;
-    align-items: center
+    padding-bottom: 5px;
+  }
+
+  &__page {
+    &-title, &-input {
+     align-self: center;
+    }
+
+    &-input {
+      padding-right: 2rem;
+
+      @media (max-width: $tablet) {
+        padding-right: 0;
+        margin-top: 5px;
+      }
+
+      input {
+        max-width: 100%;
+        height: 30px;
+        border-radius: 2px;
+        border: 1px solid #ccc;
+        padding: 5px;
+      }
+    }
   }
   .logo {
     width: 151px;
