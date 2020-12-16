@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.0.0-beta.20",
-    "@spurb/componentes": "0.0.1",
+    "@spurb/componentes": "0.0.9",
     "axios": "^0.21.0",
     "nuxt": "^2.14.0"
   },

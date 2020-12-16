@@ -1,5 +1,6 @@
 <template>
   <div ref="index" class="index">
+    <preloader :is-fetching="fetching" />
     <nav class="landing">
       <logo class="landing__logo" fill-type="white" fill-brand="white" :opacity="1" />
       <section class="landing__title">
@@ -36,6 +37,7 @@
 
 <script>
 import { Logo } from '@spurb/componentes'
+import Preloader from '~/components/elements/Preloader'
 import Footer from '~/components/sections/Footer'
 
 export default {
@@ -43,15 +45,18 @@ export default {
   layout: 'home',
   components: {
     Logo,
+    Preloader,
     Footer
   },
   data () {
     return {
-      id: ''
+      id: '',
+      fetching: false
     }
   },
   methods: {
     goRouter () {
+      this.fetching = true
       this.$router.push({ path: `/vistoria/${this.id}` })
     }
   }

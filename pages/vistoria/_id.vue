@@ -1,5 +1,6 @@
 <template>
   <div class="vistoria">
+    <preloader :is-fetching="fetching" />
     <div class="vistoria__voltar">
       <router-link tag="a" to="/">
         Voltar
@@ -161,13 +162,15 @@
 </template>
 
 <script>
+import Preloader from '~/components/elements/Preloader'
 import CreatePDF from '~/components/elements/CreatePDF'
 import ficha from '~/services/api-ficha'
 export default {
   name: 'Vistoria',
   layout: 'vistoria',
   components: {
-    CreatePDF
+    CreatePDF,
+    Preloader
   },
   async asyncData ({ params }) {
     const resInfo = await ficha.info(params.id)
@@ -191,12 +194,11 @@ export default {
         ? { exist: true, src: `data:image;base64,${resImagens.data[4].IM_IMAGEM}` }
         : { exist: false, src: defaultImg }
     }
-    console.log(vistoria)
-    return { vistoria, imagens }
+    return { vistoria, imagens, fetching: false }
   },
   data: () => ({
     pagination: false,
-    fetching: false,
+    fetching: true,
     vistoria: {},
     imagens: {}
   }),
@@ -214,7 +216,6 @@ export default {
         nomeEdificio: this.vistoria.nomeImovel || 'Não identificado.',
         qtdPavimentos: this.vistoria.pavimentos || 'Não identificado.',
         acessoDireto: this.vistoria.acessos ? 'Sim.' : 'Não.',
-        qtdAcessos: this.vistoria.acessos > 0 ? this.vistoria.acessos : 0,
         matFachada: this.vistoria.fachada.NM_MATERIAL_FACH_TERR != null ? this.vistoria.fachada.NM_MATERIAL_FACH_TERR : '',
         usoTerreo: this.vistoria.usoTerreo || 'Não identificado.',
         usoEdificacao: this.vistoria.usoEdif || 'Não identificado.'
@@ -224,6 +225,7 @@ export default {
         data.autorProjeto = this.vistoria.pesquisa.NM_AUTOR_PROJETO || 'Não identificado.'
         data.imovelNotificado = this.vistoria.pesquisa.NM_IMOVEL_NOTIFICADO_PEUC || 'Não informado.'
         data.dataConstrucao = this.vistoria.pesquisa.DT_CONSTRUCAO || 'Não identificado.'
+        data.qtdAcessos = this.vistoria.pesquisa.TB_IMOVEL.NR_ACESSOS > 0 ? this.vistoria.pesquisa.TB_IMOVEL.NR_ACESSOS : 0
         data.construtora = this.vistoria.pesquisa.NM_CONSTRUTORA || 'Não identificado.'
         data.legislacao = this.vistoria.pesquisa.NM_LEI_TOMBAMENTO || 'Não identificado.'
         data.tombamento = this.vistoria.pesquisa.TB_TIPO_TOMBAMENTO.NM_DESCRICAO || 'Não identificado.'
