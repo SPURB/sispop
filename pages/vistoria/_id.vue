@@ -225,7 +225,7 @@ export default {
         data.autorProjeto = this.vistoria.pesquisa.NM_AUTOR_PROJETO || 'Não identificado.'
         data.imovelNotificado = this.vistoria.pesquisa.NM_IMOVEL_NOTIFICADO_PEUC || 'Não informado.'
         data.dataConstrucao = this.vistoria.pesquisa.DT_CONSTRUCAO || 'Não identificado.'
-        data.qtdAcessos = this.vistoria.pesquisa.TB_IMOVEL.NR_ACESSOS > 0 ? this.vistoria.pesquisa.TB_IMOVEL.NR_ACESSOS : 0
+        data.qtdAcessos = this.vistoria.pesquisa.TB_IMOVEL.NR_ACESSOS || 0
         data.construtora = this.vistoria.pesquisa.NM_CONSTRUTORA || 'Não identificado.'
         data.legislacao = this.vistoria.pesquisa.NM_LEI_TOMBAMENTO || 'Não identificado.'
         data.tombamento = this.vistoria.pesquisa.TB_TIPO_TOMBAMENTO.NM_DESCRICAO || 'Não identificado.'
@@ -234,6 +234,7 @@ export default {
         data.imovelNotificado = 'Não informado.'
         data.construtora = 'Não identificado.'
         data.dataConstrucao = 'Não identificado.'
+        data.qtdAcessos = 0
         data.legislacao = 'Não identificado.'
         data.tombamento = 'Não identificado.'
       }
@@ -273,8 +274,8 @@ export default {
         }
       } else {
         return {
-          patologiaPaisagem: '',
-          patologiaConstrutiva: ''
+          patologiaPaisagem: 'Não identificado.',
+          patologiaConstrutiva: 'Não identificado.'
         }
       }
     },
