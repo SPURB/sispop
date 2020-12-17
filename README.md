@@ -1,4 +1,4 @@
-# app-vistorias [![Build Status](https://travis-ci.org/SPURB/sispop.svg?branch=master)](https://travis-ci.org/SPURB/sispop)
+# Sistema de geração de fichas [![Build Status](https://travis-ci.org/SPURB/sispop.svg?branch=master)](https://travis-ci.org/SPURB/sispop)
 
 ## Build Setup
 

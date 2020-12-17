@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     newSearch () {
-      this.$router.push({ path: `/vistoria/${this.id}` })
+      this.$router.push({ path: `/vistoria?id=${this.id}` })
       this.id = ''
     }
   }

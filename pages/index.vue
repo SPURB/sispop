@@ -57,7 +57,7 @@ export default {
   methods: {
     goRouter () {
       this.fetching = true
-      this.$router.push({ path: `/vistoria/${this.id}` })
+      this.$router.push({ path: `/vistoria?id=${this.id}` })
     }
   }
 }
