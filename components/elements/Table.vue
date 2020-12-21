@@ -90,7 +90,7 @@
           Quantidade de atividades no térreo
         </td>
         <td class="td-valor">
-          00
+          {{ ficha.qtdAtividades }}
         </td>
       </tr>
       <tr>

@@ -10,18 +10,19 @@
     </nav>
     <section ref="formulario" class="formulario">
       <label for="idvistoria" class="formulario--label">
-        Informe o ID da vistoria:
+        Informe o SQL da vistoria:
       </label>
       <input
         id="idvistoria"
-        v-model="id"
+        v-model="sql"
         type="text"
+        placeholder="001081000200"
         class="formulario--input"
         @keypress.enter="goRouter"
       >
       <button
-        :class="id > 0 ? '' : 'block'"
-        :disabled="id > 0 ? false : true"
+        :class="sql.length === 12 ? '' : 'block'"
+        :disabled="sql.length === 12 ? false : true"
         tag="button"
         class="formulario--btn"
         @click="goRouter"
@@ -50,14 +51,14 @@ export default {
   },
   data () {
     return {
-      id: '',
+      sql: '',
       fetching: false
     }
   },
   methods: {
     goRouter () {
       this.fetching = true
-      this.$router.push({ path: `/vistoria?id=${this.id}` })
+      this.$router.push({ path: `/vistoria?sql=${this.sql}` })
     }
   }
 }

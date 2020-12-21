@@ -83,7 +83,7 @@ const pdfSem = (header, caracterizacao, diagnostico, ambiencia, historicos, arqu
             ],
             [
               { text: 'Quantidade de acessos direto da via', bold: true }, tabela.qtdAcessos,
-              { text: 'Quantidade de atividades no térreo', bold: true }, '00'
+              { text: 'Quantidade de atividades no térreo', bold: true }, tabela.qtdAtividades
             ],
             [
               { text: 'Material predominante da fachada', bold: true }, tabela.matFachada,
@@ -133,7 +133,7 @@ const pdfSem = (header, caracterizacao, diagnostico, ambiencia, historicos, arqu
             [
               {
                 style: 'texto2',
-                text: [{ text: 'Uso da edificação: ', bold: true }, caracterizacao.usoEdificao]
+                text: [{ text: 'Uso da edificação: ', bold: true }, caracterizacao.usoEdificacao]
               }
             ],
             [{ text: 'Diagnóstico', bold: true, fontSize: 14, marginBottom: 10, marginTop: 20 }],
@@ -157,17 +157,20 @@ const pdfSem = (header, caracterizacao, diagnostico, ambiencia, historicos, arqu
         absolutePosition: { x: 1300, y: 107 },
         width: 300,
         table: {
-          widths: ['32%', '32%', '32%'],
+          widths: ['47%', '49%'],
+          padding: 22,
           body: [
             [
-              { text: 'Dados de Ambiência', bold: true, fontSize: 14, marginBottom: 10 },
-              { text: 'Dados Históricos', bold: true, fontSize: 14, marginBottom: 10 },
-              { text: 'Dados Arquitetônicos', bold: true, fontSize: 14, marginBottom: 10 }
-            ],
-            [
-              { style: 'texto2', text: ambiencia },
-              { style: 'texto2', text: historicos },
-              { style: 'texto2', text: arquitetonicos }
+              [
+                { text: 'Dados de Ambiência', bold: true, fontSize: 14, marginBottom: 10 },
+                { style: 'texto2', text: ambiencia },
+                { text: 'Dados Arquitetônicos', bold: true, fontSize: 14, marginBottom: 10, marginTop: 10 },
+                { style: 'texto2', text: arquitetonicos }
+              ],
+              [
+                { text: 'Dados Históricos', bold: true, fontSize: 14, marginBottom: 10, marginLeft: 20 },
+                { style: 'texto2', marginLeft: 20, text: historicos }
+              ]
             ]
           ]
         },
@@ -183,7 +186,7 @@ const pdfSem = (header, caracterizacao, diagnostico, ambiencia, historicos, arqu
       texto2: {
         alignment: 'justify',
         marginBottom: 3,
-        fontSize: 13,
+        fontSize: 12,
         lineHeight: 1.2
       }
     }

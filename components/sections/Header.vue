@@ -8,9 +8,9 @@
     </p>
     <p class="header-nav__page-input">
       <input
-        v-model="id"
+        v-model="sql"
         type="search"
-        placeholder="Insira o ID da vistoria"
+        placeholder="Insira o SQL da vistoria"
         @keypress.enter="newSearch"
       >
     </p>
@@ -25,12 +25,12 @@ export default {
   components: { LogoSpurb },
   data () {
     return {
-      id: ''
+      sql: ''
     }
   },
   methods: {
     newSearch () {
-      this.$router.push({ path: `/vistoria?id=${this.id}` })
+      this.$router.push({ path: `/vistoria?sql=${this.sql}` })
       this.id = ''
     }
   }

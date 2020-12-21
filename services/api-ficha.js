@@ -1,10 +1,10 @@
 import { http } from './http'
 
 export default {
-  info: (id) => {
-    return http.get(`/info/${id}`)
+  info: (query) => {
+    return http.get(`/info?${query}`)
   },
-  imagens: (id) => {
-    return http.get(`/imagem/${id}`)
+  imagens: (query) => {
+    return http.get(`/imagem?${query}`)
   }
 }

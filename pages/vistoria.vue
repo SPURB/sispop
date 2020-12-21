@@ -173,8 +173,15 @@ export default {
     Preloader
   },
   async asyncData ({ query }) {
-    const resInfo = await ficha.info(query.id)
-    const resImagens = await ficha.imagens(query.id)
+    let url = ''
+    if (query.id) {
+      url = `id=${query.id}`
+    } else if (query.sql) { // 001081000200
+      url = `s=${query.sql.slice(0, 3)}&q=${query.sql.slice(3, 6)}&l=${query.sql.slice(6, 10)}&cd=${query.sql.slice(10, 12)}`
+    }
+
+    const resInfo = await ficha.info(url)
+    const resImagens = await ficha.imagens(url)
     const defaultImg = 'data:image;base64, iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYCAMAAACJuGjuAAAAA1BMVEX///+nxBvIAAABgUlEQVR42uzBgQAAAACAoP2pF6kCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABuDw5IAAAAAAT9f92OQAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAlQCA4wABEIp+HAAAAABJRU5ErkJggg=='
     const vistoria = resInfo.data
     const imagens = {
@@ -216,6 +223,7 @@ export default {
         nomeEdificio: this.vistoria.nomeImovel || 'Não identificado.',
         qtdPavimentos: this.vistoria.pavimentos || 'Não identificado.',
         acessoDireto: this.vistoria.acessos ? 'Sim.' : 'Não.',
+        qtdAtividades: this.vistoria.qtdAtividades,
         matFachada: this.vistoria.fachada.NM_MATERIAL_FACH_TERR != null ? this.vistoria.fachada.NM_MATERIAL_FACH_TERR : '',
         usoTerreo: this.vistoria.usoTerreo || 'Não identificado.',
         usoEdificacao: this.vistoria.usoEdif || 'Não identificado.'
@@ -246,12 +254,12 @@ export default {
         const data = this.vistoria.pesquisa.NM_CARACTERIZACAO.split('.,')
         return {
           exist: true,
-          implantacaoAcesso: data[0] !== undefined ? `${data[0]}.` : 'Não identificado.',
-          qtdPavimentos: data[1] !== undefined ? `${data[1]}.` : 'Não identificado.',
-          fachadaEsquadrias: data[2] !== undefined ? `${data[2]}.` : 'Não identificado.',
-          elementosNotaveis: data[3] !== undefined ? `${data[3]}.` : 'Não identificado.',
-          usoTerreo: data[4] !== undefined ? `${data[4]}.` : 'Não identificado.',
-          usoEdificacao: data[5] !== undefined ? `${data[5]}.` : 'Não identificado.'
+          implantacaoAcesso: data[0] !== undefined ? `${data[0]}` : 'Não identificado.',
+          qtdPavimentos: data[1] !== undefined ? `${data[1]}` : 'Não identificado.',
+          fachadaEsquadrias: data[2] !== undefined ? `${data[2]}` : 'Não identificado.',
+          elementosNotaveis: data[3] !== undefined ? `${data[3]}` : 'Não identificado.',
+          usoTerreo: data[4] !== undefined ? `${data[4]}` : 'Não identificado.',
+          usoEdificacao: data[5] !== undefined ? `${data[5]}` : 'Não identificado.'
         }
       } else {
         return {
@@ -269,13 +277,13 @@ export default {
       if (this.vistoria.pesquisa) {
         const data = this.vistoria.pesquisa.NM_DIAGNOSTICO.split('.,').filter(v => v !== 'N/A')
         return {
-          patologiaPaisagem: data[0] !== undefined ? `${data[0]}.` : 'Não identificado.',
-          patologiaConstrutiva: data[1] !== undefined ? `${data[1]}.` : 'Não identificado.'
+          patologiaPaisagem: data[0] !== undefined ? `${data[0]}` : 'Não identificado.',
+          patologiaConstrutiva: data[1] !== undefined ? `${data[1]}` : 'Não identificado.'
         }
       } else {
         return {
-          patologiaPaisagem: 'Não identificado.',
-          patologiaConstrutiva: 'Não identificado.'
+          patologiaPaisagem: 'Não identificado',
+          patologiaConstrutiva: 'Não identificado'
         }
       }
     },
