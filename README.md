@@ -18,3 +18,8 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+
+## API de dados
+
+https://documenter.getpostman.com/view/8000094/TW6wJos5
+
