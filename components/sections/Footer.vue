@@ -1,6 +1,9 @@
 <template>
-  <div class="footer__info">
-    <p>Caso surjam dúvidas ou problemas técnicos, envie um e-mail para <a class="info__email" href="mailto:desenvolvimento@spurbanismo.sp.gov.br?subject=Sispop%20São%20Paulo%20Urbanismo">desenvolvimento@spurbanismo.sp.gov.br</a></p>
+  <div class="footer">
+    <section class="footer__group">
+      <p>Caso surjam dúvidas ou problemas técnicos, envie um e-mail para <a class="info__email" href="mailto:desenvolvimento@spurbanismo.sp.gov.br?subject=Sispop%20São%20Paulo%20Urbanismo">desenvolvimento@spurbanismo.sp.gov.br</a></p>
+      <p><a href="https://documenter.getpostman.com/view/8000094/TW6wJos5">Documentação da API</a></p>
+    </section>
     <a class="info__icon" href="https://github.com/spurb/sispop"><github /></a>
   </div>
 </template>
@@ -15,7 +18,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '~/assets/variables';
-.footer__info {
+.footer{
   background-color: $brand-2;
   display: flex;
   justify-content: space-between;
@@ -26,6 +29,20 @@ export default {
     flex-direction: column;
     text-align: center;
     font-size: small;
+  }
+
+  &__group p:nth-child(2) {
+    margin-top: 10px;
+    a {
+      color: #fff;
+      text-decoration: none;
+      background-color: #0A5950;
+      padding: 7px;
+
+      &:hover {
+        opacity: .9;
+      }
+    }
   }
 }
 

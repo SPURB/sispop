@@ -219,87 +219,47 @@ export default {
       }
     },
     ficha () {
-      const data = {
-        nomeEdificio: this.vistoria.nomeImovel || 'Não identificado.',
-        qtdPavimentos: this.vistoria.pavimentos || 'Não identificado.',
-        acessoDireto: this.vistoria.acessos ? 'Sim.' : 'Não.',
-        qtdAtividades: this.vistoria.qtdAtividades,
-        matFachada: this.vistoria.fachada.NM_MATERIAL_FACH_TERR != null ? this.vistoria.fachada.NM_MATERIAL_FACH_TERR : '',
-        usoTerreo: this.vistoria.usoTerreo || 'Não identificado.',
-        usoEdificacao: this.vistoria.usoEdif || 'Não identificado.'
+      return {
+        nomeEdificio: this.vistoria.nomeImovel || 'N/A.',
+        qtdPavimentos: this.vistoria.qtdPavimentos || 'N/A.',
+        acessoDireto: this.vistoria.qtdAcessoDireto ? 'Sim.' : 'Não.',
+        qtdAtividades: this.vistoria.qtdAtividadesTerreo,
+        matFachada: this.vistoria.materialPredomFachada || 'N/A.',
+        usoTerreo: this.vistoria.usoTerreo || 'N/A.',
+        usoEdificacao: this.vistoria.usoEdif || 'N/A.',
+        autorProjeto: this.vistoria.autor || 'N/A.',
+        imovelNotificado: this.vistoria.peuc || 'N/A.',
+        dataConstrucao: this.vistoria.dataConstrucao || 'N/A.',
+        qtdAcessos: this.vistoria.qtdAcessos || 0,
+        construtora: this.vistoria.construtora || 'N/A.',
+        legislacao: this.vistoria.leiTombamento || 'N/A.',
+        tombamento: this.vistoria.tombamento || 'N/A.'
       }
-
-      if (this.vistoria.pesquisa) {
-        data.autorProjeto = this.vistoria.pesquisa.NM_AUTOR_PROJETO || 'Não identificado.'
-        data.imovelNotificado = this.vistoria.pesquisa.NM_IMOVEL_NOTIFICADO_PEUC || 'Não informado.'
-        data.dataConstrucao = this.vistoria.pesquisa.DT_CONSTRUCAO || 'Não identificado.'
-        data.qtdAcessos = this.vistoria.pesquisa.TB_IMOVEL.NR_ACESSOS || 0
-        data.construtora = this.vistoria.pesquisa.NM_CONSTRUTORA || 'Não identificado.'
-        data.legislacao = this.vistoria.pesquisa.NM_LEI_TOMBAMENTO || 'Não identificado.'
-        data.tombamento = this.vistoria.pesquisa.TB_TIPO_TOMBAMENTO.NM_DESCRICAO || 'Não identificado.'
-      } else {
-        data.autorProjeto = 'Não identificado.'
-        data.imovelNotificado = 'Não informado.'
-        data.construtora = 'Não identificado.'
-        data.dataConstrucao = 'Não identificado.'
-        data.qtdAcessos = 0
-        data.legislacao = 'Não identificado.'
-        data.tombamento = 'Não identificado.'
-      }
-
-      return data
     },
     caracterizacao () {
-      if (this.vistoria.pesquisa) {
-        const data = this.vistoria.pesquisa.NM_CARACTERIZACAO.split('.,')
-        return {
-          exist: true,
-          implantacaoAcesso: data[0] !== undefined ? `${data[0]}` : 'Não identificado.',
-          qtdPavimentos: data[1] !== undefined ? `${data[1]}` : 'Não identificado.',
-          fachadaEsquadrias: data[2] !== undefined ? `${data[2]}` : 'Não identificado.',
-          elementosNotaveis: data[3] !== undefined ? `${data[3]}` : 'Não identificado.',
-          usoTerreo: data[4] !== undefined ? `${data[4]}` : 'Não identificado.',
-          usoEdificacao: data[5] !== undefined ? `${data[5]}` : 'Não identificado.'
-        }
-      } else {
-        return {
-          exist: false,
-          implantacaoAcesso: 'Não identificado.',
-          qtdPavimentos: 'Não identificado.',
-          fachadaEsquadrias: 'Não identificado.',
-          elementosNotaveis: 'Não identificado.',
-          usoTerreo: 'Não identificado.',
-          usoEdificacao: 'Não identificado.'
-        }
+      const data = this.vistoria.caracterizacao.split('.,')
+      return {
+        exist: true,
+        implantacaoAcesso: data[0] !== undefined ? `${data[0]}` : 'N/A.',
+        qtdPavimentos: data[1] !== undefined ? `${data[1]}` : 'N/A.',
+        fachadaEsquadrias: data[2] !== undefined ? `${data[2]}` : 'N/A.',
+        elementosNotaveis: data[3] !== undefined ? `${data[3]}` : 'N/A.',
+        usoTerreo: data[4] !== undefined ? `${data[4]}` : 'N/A.',
+        usoEdificacao: data[5] !== undefined ? `${data[5]}` : 'N/A.'
       }
     },
     diagnostico () {
-      if (this.vistoria.pesquisa) {
-        const data = this.vistoria.pesquisa.NM_DIAGNOSTICO.split('.,').filter(v => v !== 'N/A')
-        return {
-          patologiaPaisagem: data[0] !== undefined ? `${data[0]}` : 'Não identificado.',
-          patologiaConstrutiva: data[1] !== undefined ? `${data[1]}` : 'Não identificado.'
-        }
-      } else {
-        return {
-          patologiaPaisagem: 'Não identificado',
-          patologiaConstrutiva: 'Não identificado'
-        }
+      const data = this.vistoria.diagnostico.split('.,')
+      return {
+        patologiaPaisagem: data[0] !== undefined ? `${data[0]}` : 'N/A.',
+        patologiaConstrutiva: data[1] !== undefined ? `${data[1]}` : 'N/A.'
       }
     },
     informacaoPgDois () {
-      if (this.vistoria.pesquisa) {
-        return {
-          ambiencia: this.vistoria.pesquisa.NM_DADOS_AMBIENCIA || 'Não consta nas bases consultadas.',
-          historicos: this.vistoria.pesquisa.NM_DADOS_HISTORICOS || 'Não consta nas bases consultadas.',
-          arquitetonicos: this.vistoria.pesquisa.NM_ESTILO_ARQUITETONICO || 'Não consta nas bases consultadas.'
-        }
-      } else {
-        return {
-          ambiencia: 'Não consta nas bases consultadas.',
-          historicos: 'Não consta nas bases consultadas.',
-          arquitetonicos: 'Não consta nas bases consultadas.'
-        }
+      return {
+        ambiencia: this.vistoria.ambiencia || 'Não consta nas bases consultadas.',
+        historicos: this.vistoria.historicos || 'Não consta nas bases consultadas.',
+        arquitetonicos: this.vistoria.arquitetonicos || 'Não consta nas bases consultadas.'
       }
     }
   }
@@ -505,6 +465,7 @@ export default {
         img {
           width: 100%;
           height: auto;
+          max-height: 100%;
         }
         width: 100%;
         height: 80vh;
